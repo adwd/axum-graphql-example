@@ -4,6 +4,8 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
+async-graphql = "5.0.4"
+async-graphql-axum = "5.0.4"
 axum = "0.6.1"
 sqlx = { version = "0.6.2", features = ["runtime-tokio-native-tls", "postgres", "migrate", "offline"] }
 tokio = { version = "1.23.0", features = ["full"] }
