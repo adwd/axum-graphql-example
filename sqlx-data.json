@@ -1,0 +1,51 @@
+{
+  "db": "PostgreSQL",
+  "c1a141bd2898407a67de8c30db9baf96092cadf9b4589f199e8c10110caa2ee4": {
+    "describe": {
+      "columns": [
+        {
+          "name": "id",
+          "ordinal": 0,
+          "type_info": "Int4"
+        },
+        {
+          "name": "name",
+          "ordinal": 1,
+          "type_info": "Text"
+        },
+        {
+          "name": "country_code",
+          "ordinal": 2,
+          "type_info": "Bpchar"
+        },
+        {
+          "name": "district",
+          "ordinal": 3,
+          "type_info": "Text"
+        },
+        {
+          "name": "population",
+          "ordinal": 4,
+          "type_info": "Int4"
+        },
+        {
+          "name": "local_name",
+          "ordinal": 5,
+          "type_info": "Text"
+        }
+      ],
+      "nullable": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        true
+      ],
+      "parameters": {
+        "Left": []
+      }
+    },
+    "query": "\n        select * from public.city limit 10;\n    "
+  }
+}
