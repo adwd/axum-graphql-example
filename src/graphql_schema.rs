@@ -48,7 +48,7 @@ pub fn router(pool: &Pool<Postgres>) -> Router {
         .data(pool.clone())
         .finish();
 
-    println!("GraphiQL IDE: http://localhost:3000");
+    println!("GraphiQL IDE: http://localhost:3000/graphql");
 
     Router::new()
         .route("/graphql", get(graphiql).post(graphql_handler))
