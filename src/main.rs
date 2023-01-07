@@ -1,6 +1,6 @@
 use axum::{routing::get, Router};
 use axum_graphql_example::graphql_schema;
-use dotenv::from_filename;
+use dotenvy::from_filename;
 use sqlx::postgres::PgPoolOptions;
 use std::env;
 
