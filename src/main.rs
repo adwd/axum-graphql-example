@@ -1,9 +1,13 @@
 use axum::{routing::get, Router};
 use axum_graphql_example::graphql_schema;
 use sqlx::postgres::PgPoolOptions;
+use std::env;
 
 #[tokio::main]
 async fn main() -> Result<(), sqlx::Error> {
+    env::set_var("RUST_LOG", "debug");
+    env_logger::init();
+
     let pool = PgPoolOptions::new()
         .max_connections(5)
         .connect("postgres://world:world123@localhost:7777/world-db")
