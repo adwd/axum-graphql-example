@@ -12,6 +12,6 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Build
-      run: cargo build
+      run: CI=true cargo build
     - name: Run unit tests
-      run: cargo test
+      run: CI=true cargo test
