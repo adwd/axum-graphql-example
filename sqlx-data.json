@@ -1,51 +1,53 @@
 {
   "db": "PostgreSQL",
-  "c1a141bd2898407a67de8c30db9baf96092cadf9b4589f199e8c10110caa2ee4": {
+  "4d40246429d695a4ac90349fc600ca9aadece95e386dc4c068b11d2bf1705fbc": {
     "describe": {
       "columns": [
         {
-          "name": "id",
+          "name": "name",
           "ordinal": 0,
-          "type_info": "Int4"
+          "type_info": "Text"
+        },
+        {
+          "name": "country_code",
+          "ordinal": 1,
+          "type_info": "Bpchar"
+        }
+      ],
+      "nullable": [
+        false,
+        false
+      ],
+      "parameters": {
+        "Left": [
+          "BpcharArray"
+        ]
+      }
+    },
+    "query": "select name, country_code from public.city where country_code = any($1)"
+  },
+  "99ccb94721445567aecf69bec61d5d1c513cd8da89e4588e616a55ab5b805ea3": {
+    "describe": {
+      "columns": [
+        {
+          "name": "code",
+          "ordinal": 0,
+          "type_info": "Bpchar"
         },
         {
           "name": "name",
           "ordinal": 1,
           "type_info": "Text"
-        },
-        {
-          "name": "country_code",
-          "ordinal": 2,
-          "type_info": "Bpchar"
-        },
-        {
-          "name": "district",
-          "ordinal": 3,
-          "type_info": "Text"
-        },
-        {
-          "name": "population",
-          "ordinal": 4,
-          "type_info": "Int4"
-        },
-        {
-          "name": "local_name",
-          "ordinal": 5,
-          "type_info": "Text"
         }
       ],
       "nullable": [
         false,
-        false,
-        false,
-        false,
-        false,
-        true
+        false
       ],
       "parameters": {
         "Left": []
       }
     },
-    "query": "\n        select * from public.city limit 10;\n    "
+    "query": "select code, name from public.country limit 10;"
   }
 }
