@@ -238,7 +238,6 @@ dependencies = [
  "async-graphql",
  "async-graphql-axum",
  "axum",
- "dotenvy",
  "env_logger",
  "log",
  "sqlx",

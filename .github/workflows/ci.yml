@@ -12,6 +12,6 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Build
-      run: CI=true cargo build
+      run: SQLX_OFFLINE=true cargo build
     - name: Run unit tests
-      run: CI=true cargo test
+      run: SQLX_OFFLINE=true cargo test
