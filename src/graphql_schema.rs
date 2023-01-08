@@ -27,7 +27,7 @@ pub struct Country {
 
 #[ComplexObject]
 impl Country {
-    /// Cities within country
+    /// Cities in the country
     async fn cities(&self, ctx: &Context<'_>) -> Result<Vec<City>> {
         ctx.data_unchecked::<DataLoader<CityLoader>>()
             .load_one(self.code.clone())
@@ -124,8 +124,24 @@ impl Query {
     }
 
     /// Fetch countries
-    async fn countries(&self, ctx: &Context<'_>) -> Result<Vec<Country>> {
+    async fn countries(
+        &self,
+        ctx: &Context<'_>,
+        #[graphql(desc = "search query by country name")] search: Option<String>,
+    ) -> Result<Vec<Country>> {
         let pool = ctx.data_unchecked::<Pool<Postgres>>();
+        if let Some(query) = search {
+            let countries = sqlx::query_as!(
+                Country,
+                "select code, name, code2 from public.country where name like $1;",
+                format!("%{}%", query)
+            )
+            .fetch_all(pool)
+            .await?;
+
+            return Ok(countries);
+        }
+
         let countries = sqlx::query_as!(
             Country,
             "select code, name, code2 from public.country limit 10;"

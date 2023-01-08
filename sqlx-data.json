@@ -1,5 +1,37 @@
 {
   "db": "PostgreSQL",
+  "053212dbf1b4ec153e66edbd7daeca1c026581e6f7446f14da63327f59d5db8c": {
+    "describe": {
+      "columns": [
+        {
+          "name": "code",
+          "ordinal": 0,
+          "type_info": "Bpchar"
+        },
+        {
+          "name": "name",
+          "ordinal": 1,
+          "type_info": "Text"
+        },
+        {
+          "name": "code2",
+          "ordinal": 2,
+          "type_info": "Bpchar"
+        }
+      ],
+      "nullable": [
+        false,
+        false,
+        false
+      ],
+      "parameters": {
+        "Left": [
+          "Text"
+        ]
+      }
+    },
+    "query": "select code, name, code2 from public.country where name like $1;"
+  },
   "4d40246429d695a4ac90349fc600ca9aadece95e386dc4c068b11d2bf1705fbc": {
     "describe": {
       "columns": [
