@@ -17,12 +17,17 @@ use std::{collections::HashMap, sync::Arc};
 #[derive(SimpleObject, Debug)]
 #[graphql(complex)]
 pub struct Country {
+    /// Code of Country
     pub code: String,
+    /// Name of Country
     pub name: String,
+    #[graphql(skip)]
+    pub code2: String,
 }
 
 #[ComplexObject]
 impl Country {
+    /// Cities within country
     async fn cities(&self, ctx: &Context<'_>) -> Result<Vec<City>> {
         ctx.data_unchecked::<DataLoader<CityLoader>>()
             .load_one(self.code.clone())
@@ -31,11 +36,22 @@ impl Country {
             .map_err(|e| e.into())
             .await
     }
+
+    /// Emoji of country flag
+    async fn flag(&self, ctx: &Context<'_>) -> Result<Option<String>> {
+        ctx.data_unchecked::<DataLoader<CountryFlagLoader>>()
+            .load_one(self.code2.clone())
+            // TODO: ちゃんとしたエラーハンドリングを考える
+            .map_err(|e| e.into())
+            .await
+    }
 }
 
 #[derive(SimpleObject, Debug, Clone)]
+/// City
 pub struct City {
     pub name: String,
+    #[graphql(skip)]
     pub country_code: String,
 }
 
@@ -61,7 +77,6 @@ impl Loader<String> for CityLoader {
         .await?;
 
         let mut cities_map: HashMap<String, Vec<City>> = HashMap::new();
-
         for c in cities.into_iter() {
             if let Some(cities) = cities_map.get_mut(&c.country_code) {
                 cities.push(c);
@@ -74,6 +89,31 @@ impl Loader<String> for CityLoader {
     }
 }
 
+struct CountryFlagLoader {
+    pool: sqlx::Pool<Postgres>,
+}
+
+#[async_trait::async_trait]
+impl Loader<String> for CountryFlagLoader {
+    type Value = String;
+    type Error = Arc<sqlx::Error>;
+
+    async fn load(&self, keys: &[String]) -> Result<HashMap<String, Self::Value>, Self::Error> {
+        debug!("DataLoader for country flag, keys: {:?}", keys);
+
+        let records = sqlx::query!(
+            "select code2, emoji from public.country_flag where code2 =  any($1)",
+            &keys[..]
+        )
+        .fetch_all(&self.pool)
+        .await?;
+
+        Ok(HashMap::from_iter(
+            records.into_iter().map(|r| (r.code2, r.emoji)),
+        ))
+    }
+}
+
 pub struct Query;
 
 #[Object]
@@ -83,11 +123,15 @@ impl Query {
         a + b
     }
 
+    /// Fetch countries
     async fn countries(&self, ctx: &Context<'_>) -> Result<Vec<Country>> {
         let pool = ctx.data_unchecked::<Pool<Postgres>>();
-        let countries = sqlx::query_as!(Country, "select code, name from public.country limit 10;")
-            .fetch_all(pool)
-            .await?;
+        let countries = sqlx::query_as!(
+            Country,
+            "select code, name, code2 from public.country limit 10;"
+        )
+        .fetch_all(pool)
+        .await?;
 
         Ok(countries)
     }
@@ -109,6 +153,10 @@ pub fn router(pool: &Pool<Postgres>) -> Router {
         .data(pool.clone())
         .data(DataLoader::new(
             CityLoader { pool: pool.clone() },
+            tokio::task::spawn,
+        ))
+        .data(DataLoader::new(
+            CountryFlagLoader { pool: pool.clone() },
             tokio::task::spawn,
         ))
         .finish();
