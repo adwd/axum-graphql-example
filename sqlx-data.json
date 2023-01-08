@@ -26,7 +26,33 @@
     },
     "query": "select name, country_code from public.city where country_code = any($1)"
   },
-  "99ccb94721445567aecf69bec61d5d1c513cd8da89e4588e616a55ab5b805ea3": {
+  "d379339d952fbfeaf74a0991bcc6381b6579b8881aeeafce112aab993618237d": {
+    "describe": {
+      "columns": [
+        {
+          "name": "code2",
+          "ordinal": 0,
+          "type_info": "Bpchar"
+        },
+        {
+          "name": "emoji",
+          "ordinal": 1,
+          "type_info": "Text"
+        }
+      ],
+      "nullable": [
+        false,
+        false
+      ],
+      "parameters": {
+        "Left": [
+          "BpcharArray"
+        ]
+      }
+    },
+    "query": "select code2, emoji from public.country_flag where code2 =  any($1)"
+  },
+  "ebab9d35f546cefe22e24afdd89580664480896921c6230ee91b1aac6fca6f21": {
     "describe": {
       "columns": [
         {
@@ -38,9 +64,15 @@
           "name": "name",
           "ordinal": 1,
           "type_info": "Text"
+        },
+        {
+          "name": "code2",
+          "ordinal": 2,
+          "type_info": "Bpchar"
         }
       ],
       "nullable": [
+        false,
         false,
         false
       ],
@@ -48,6 +80,6 @@
         "Left": []
       }
     },
-    "query": "select code, name from public.country limit 10;"
+    "query": "select code, name, code2 from public.country limit 10;"
   }
 }
