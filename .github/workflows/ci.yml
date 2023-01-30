@@ -1,7 +1,10 @@
 name: Rust
 
 on:
+  pull_request:
   push:
+    branches:
+      - main
 
 env:
   CARGO_TERM_COLOR: always
@@ -10,8 +13,35 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
-    - name: Build
-      run: SQLX_OFFLINE=true cargo build
-    - name: Run unit tests
-      run: SQLX_OFFLINE=true cargo test
+    - uses: actions/checkout@v2
+      with:
+        ref: ${{ github.event.pull_request.head.sha }}
+    - uses: actions-rs/toolchain@v1
+      with:
+        toolchain: stable
+        components: rustfmt, clippy
+    - uses: r7kamura/rust-problem-matchers@v1
+    - uses: actions-rs/cargo@v1
+      name: cargo fmt
+      with:
+        command: fmt
+        args: --all -- --check
+    - uses: actions-rs/cargo@v1
+      name: cargo build
+      env:
+        SQLX_OFFLINE: 'true'
+      with:
+        command: build
+    - uses: actions-rs/cargo@v1
+      name: cargo clippy
+      env:
+        SQLX_OFFLINE: true
+      with:
+        command: clippy
+        args: -- -D warnings
+    - uses: actions-rs/cargo@v1
+      name: cargo test
+      env:
+        SQLX_OFFLINE: 'true'
+      with:
+        command: test
