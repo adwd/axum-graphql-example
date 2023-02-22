@@ -128,23 +128,15 @@ impl Query {
         &self,
         ctx: &Context<'_>,
         #[graphql(desc = "search query by country name")] search: Option<String>,
+        #[graphql(desc = "limit", default = 20)] limit: i64,
     ) -> Result<Vec<Country>> {
         let pool = ctx.data_unchecked::<Pool<Postgres>>();
-        if let Some(query) = search {
-            let countries = sqlx::query_as!(
-                Country,
-                "select code, name, code2 from public.country where name like $1;",
-                format!("%{}%", query)
-            )
-            .fetch_all(pool)
-            .await?;
-
-            return Ok(countries);
-        }
 
         let countries = sqlx::query_as!(
             Country,
-            "select code, name, code2 from public.country limit 10;"
+            "select code, name, code2 from public.country where lower(name) like $1 limit $2;",
+            search.map_or_else(|| "%%".into(), |s| format!("%{}%", s.to_lowercase())),
+            limit.max(100)
         )
         .fetch_all(pool)
         .await?;
