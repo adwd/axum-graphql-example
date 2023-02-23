@@ -3,6 +3,14 @@ name = "axum-graphql-example"
 version = "0.1.0"
 edition = "2021"
 
+[[bin]]
+name = "main"
+path = "src/main.rs"
+
+[[bin]]
+name = "sdl-export"
+path = "src/sdl_export.rs"
+
 [dependencies]
 async-graphql = { version = "5.0.6", features = ["dataloader"] }
 async-graphql-axum = "5.0.6"

@@ -9,12 +9,7 @@
       "request": "launch",
       "name": "Debug unit tests in library 'axum-graphql-example'",
       "cargo": {
-        "args": [
-          "test",
-          "--no-run",
-          "--lib",
-          "--package=axum-graphql-example"
-        ],
+        "args": ["test", "--no-run", "--lib", "--package=axum-graphql-example"],
         "filter": {
           "name": "axum-graphql-example",
           "kind": "lib"
@@ -28,13 +23,9 @@
       "request": "launch",
       "name": "Debug executable 'axum-graphql-example'",
       "cargo": {
-        "args": [
-          "build",
-          "--bin=axum-graphql-example",
-          "--package=axum-graphql-example"
-        ],
+        "args": ["build", "--bin=main", "--package=axum-graphql-example"],
         "filter": {
-          "name": "axum-graphql-example",
+          "name": "main",
           "kind": "bin"
         }
       },
@@ -46,14 +37,9 @@
       "request": "launch",
       "name": "Debug unit tests in executable 'axum-graphql-example'",
       "cargo": {
-        "args": [
-          "test",
-          "--no-run",
-          "--bin=axum-graphql-example",
-          "--package=axum-graphql-example"
-        ],
+        "args": ["test", "--no-run", "--bin=main", "--package=axum-graphql-example"],
         "filter": {
-          "name": "axum-graphql-example",
+          "name": "main",
           "kind": "bin"
         }
       },

@@ -13,7 +13,7 @@ use crate::{
 };
 
 #[derive(MergedObject, Default)]
-struct Query(CountryQuery, CityQuery);
+pub struct Query(CountryQuery, CityQuery);
 
 async fn graphql_handler(
     schema: Extension<Schema<Query, EmptyMutation, EmptySubscription>>,
