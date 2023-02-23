@@ -49,12 +49,21 @@ impl Country {
 }
 
 #[derive(SimpleObject, Debug, Clone)]
+#[graphql(complex)]
 /// City
 pub struct City {
-    pub id: i32,
+    #[graphql(skip)]
+    pub row_id: i32,
     pub name: String,
     #[graphql(skip)]
     pub country_code: String,
+}
+
+#[ComplexObject]
+impl City {
+    async fn id(&self) -> ID {
+        self.row_id.to_string().into()
+    }
 }
 
 struct CityLoader {
@@ -72,7 +81,7 @@ impl Loader<String> for CityLoader {
         // https://github.com/launchbadge/sqlx/blob/main/FAQ.md#how-can-i-do-a-select--where-foo-in--query
         let cities = sqlx::query_as!(
             City,
-            "select id, name, country_code from public.city where country_code = any($1)",
+            "select id as row_id, name, country_code from public.city where country_code = any($1)",
             &keys[..]
         )
         .fetch_all(&self.pool)
@@ -130,7 +139,7 @@ impl Query {
         &self,
         ctx: &Context<'_>,
         #[graphql(desc = "search query by country name")] search: Option<String>,
-        #[graphql(desc = "limit", default = 20)] limit: i64,
+        #[graphql(desc = "limit", default = 20, validator(maximum = 100))] limit: i64,
     ) -> Result<Vec<Country>> {
         let pool = ctx.data_unchecked::<Pool<Postgres>>();
 
@@ -169,7 +178,7 @@ impl Query {
                     let a: i32 = a;
                     sqlx::query_as!(
                         City,
-                        "select id, name, country_code from public.city where id > $1 order by id asc limit $2;",
+                        "select id as row_id, name, country_code from public.city where id > $1 order by id asc limit $2;",
                         a,
                         first.map_or(20, |v| (v as i64))
                     )
@@ -178,7 +187,7 @@ impl Query {
                 } else {
                     sqlx::query_as!(
                         City,
-                        "select id, name, country_code from public.city order by id asc limit $1;",
+                        "select id as row_id, name, country_code from public.city order by id asc limit $1;",
                         first.map_or(20, |v| (v as i64))
                     )
                     .fetch_all(pool)
@@ -190,7 +199,7 @@ impl Query {
                 connection.edges.extend(
                     cities
                         .into_iter()
-                        .map(|c| Edge::with_additional_fields(c.id, c, EmptyFields)),
+                        .map(|c| Edge::with_additional_fields(c.row_id, c, EmptyFields)),
                 );
                 Ok::<_, async_graphql::Error>(connection)
             },
