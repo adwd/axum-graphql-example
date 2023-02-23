@@ -1,4 +1,5 @@
 use async_graphql::{
+    connection::*,
     dataloader::{DataLoader, Loader},
     futures_util::TryFutureExt,
     http::GraphiQLSource,
@@ -50,6 +51,7 @@ impl Country {
 #[derive(SimpleObject, Debug, Clone)]
 /// City
 pub struct City {
+    pub id: i32,
     pub name: String,
     #[graphql(skip)]
     pub country_code: String,
@@ -70,7 +72,7 @@ impl Loader<String> for CityLoader {
         // https://github.com/launchbadge/sqlx/blob/main/FAQ.md#how-can-i-do-a-select--where-foo-in--query
         let cities = sqlx::query_as!(
             City,
-            "select name, country_code from public.city where country_code = any($1)",
+            "select id, name, country_code from public.city where country_code = any($1)",
             &keys[..]
         )
         .fetch_all(&self.pool)
@@ -136,12 +138,64 @@ impl Query {
             Country,
             "select code, name, code2 from public.country where lower(name) like $1 limit $2;",
             search.map_or_else(|| "%%".into(), |s| format!("%{}%", s.to_lowercase())),
-            limit.max(100)
+            limit
         )
         .fetch_all(pool)
         .await?;
 
         Ok(countries)
+    }
+
+    async fn cities(
+        &self,
+        ctx: &Context<'_>,
+        after: Option<String>,
+        before: Option<String>,
+        first: Option<i32>,
+        last: Option<i32>,
+    ) -> Result<Connection<i32, City, EmptyFields, EmptyFields>> {
+        // https://async-graphql.github.io/async-graphql/en/cursor_connections.html
+        // https://relay.dev/graphql/connections.htm
+        query(
+            after,
+            before,
+            first,
+            last,
+            |after, _before, first, _last| async move {
+                let pool = ctx.data_unchecked::<Pool<Postgres>>();
+
+                let cities = if let Some(a) = after {
+                    // i32の変数に束縛し直すとかやらないとコンパイルエラーになってしまう
+                    let a: i32 = a;
+                    sqlx::query_as!(
+                        City,
+                        "select id, name, country_code from public.city where id > $1 order by id asc limit $2;",
+                        a,
+                        first.map_or(20, |v| (v as i64))
+                    )
+                    .fetch_all(pool)
+                    .await?
+                } else {
+                    sqlx::query_as!(
+                        City,
+                        "select id, name, country_code from public.city order by id asc limit $1;",
+                        first.map_or(20, |v| (v as i64))
+                    )
+                    .fetch_all(pool)
+                    .await?
+                };
+
+                // todo: has_previous, has_nextをちゃんとやる
+                let mut connection = Connection::new(true, true);
+                connection.edges.extend(
+                    cities
+                        .into_iter()
+                        .map(|c| Edge::with_additional_fields(c.id, c, EmptyFields)),
+                );
+                Ok::<_, async_graphql::Error>(connection)
+            },
+        )
+        .await
     }
 }
 
