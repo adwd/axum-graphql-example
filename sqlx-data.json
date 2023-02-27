@@ -1,6 +1,6 @@
 {
   "db": "PostgreSQL",
-  "053212dbf1b4ec153e66edbd7daeca1c026581e6f7446f14da63327f59d5db8c": {
+  "1de18d85144d5e396f799f0ced578f545ca4484dce812378c418a69ebec953cd": {
     "describe": {
       "columns": [
         {
@@ -26,37 +26,77 @@
       ],
       "parameters": {
         "Left": [
-          "Text"
+          "Text",
+          "Int8"
         ]
       }
     },
-    "query": "select code, name, code2 from public.country where name like $1;"
+    "query": "select code, name, code2 from public.country where lower(name) like $1 limit $2;"
   },
-  "4d40246429d695a4ac90349fc600ca9aadece95e386dc4c068b11d2bf1705fbc": {
+  "73dfcfa2b61dd152a8c79ab8b80e3623bbdfed8306508d756a714bc1ca30d113": {
     "describe": {
       "columns": [
         {
-          "name": "name",
+          "name": "row_id",
           "ordinal": 0,
+          "type_info": "Int4"
+        },
+        {
+          "name": "name",
+          "ordinal": 1,
           "type_info": "Text"
         },
         {
           "name": "country_code",
-          "ordinal": 1,
+          "ordinal": 2,
           "type_info": "Bpchar"
         }
       ],
       "nullable": [
         false,
+        false,
         false
       ],
       "parameters": {
         "Left": [
-          "BpcharArray"
+          "Int4",
+          "Int8"
         ]
       }
     },
-    "query": "select name, country_code from public.city where country_code = any($1)"
+    "query": "select id as row_id, name, country_code from public.city where id > $1 order by id asc limit $2;"
+  },
+  "9e475a852908042cbc2c47bf141a602340872a1f1741bb227ab4ae6594ccd308": {
+    "describe": {
+      "columns": [
+        {
+          "name": "row_id",
+          "ordinal": 0,
+          "type_info": "Int4"
+        },
+        {
+          "name": "name",
+          "ordinal": 1,
+          "type_info": "Text"
+        },
+        {
+          "name": "country_code",
+          "ordinal": 2,
+          "type_info": "Bpchar"
+        }
+      ],
+      "nullable": [
+        false,
+        false,
+        false
+      ],
+      "parameters": {
+        "Left": [
+          "Int8"
+        ]
+      }
+    },
+    "query": "select id as row_id, name, country_code from public.city order by id asc limit $1;"
   },
   "d379339d952fbfeaf74a0991bcc6381b6579b8881aeeafce112aab993618237d": {
     "describe": {
@@ -84,13 +124,13 @@
     },
     "query": "select code2, emoji from public.country_flag where code2 =  any($1)"
   },
-  "ebab9d35f546cefe22e24afdd89580664480896921c6230ee91b1aac6fca6f21": {
+  "e427c77493fc2f373be950f3e49d6a8d3c052043df2fec91be969ced842aeca0": {
     "describe": {
       "columns": [
         {
-          "name": "code",
+          "name": "row_id",
           "ordinal": 0,
-          "type_info": "Bpchar"
+          "type_info": "Int4"
         },
         {
           "name": "name",
@@ -98,7 +138,7 @@
           "type_info": "Text"
         },
         {
-          "name": "code2",
+          "name": "country_code",
           "ordinal": 2,
           "type_info": "Bpchar"
         }
@@ -109,9 +149,11 @@
         false
       ],
       "parameters": {
-        "Left": []
+        "Left": [
+          "BpcharArray"
+        ]
       }
     },
-    "query": "select code, name, code2 from public.country limit 10;"
+    "query": "select id as row_id, name, country_code from public.city where country_code = any($1)"
   }
 }
