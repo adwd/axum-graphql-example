@@ -16,7 +16,7 @@ async-graphql = { version = "5.0.7", features = ["dataloader"] }
 async-graphql-axum = "5.0.6"
 axum = "0.6.11"
 derive_more = "0.99.17"
-dotenvy = "0.15.6"
+dotenvy = "0.15.7"
 env_logger = "0.10.0"
 log = "0.4.17"
 sqlx = { version = "0.6.3", features = ["runtime-tokio-native-tls", "postgres", "migrate", "offline"] }
