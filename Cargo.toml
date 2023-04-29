@@ -16,10 +16,10 @@ path = "src/sdl_export.rs"
 [dependencies]
 async-graphql = { version = "5.0.7", features = ["dataloader"] }
 async-graphql-axum = "5.0.7"
-axum = "0.6.16"
+axum = "0.6.17"
 derive_more = "0.99.17"
 dotenvy = "0.15.7"
 env_logger = "0.10.0"
 log = "0.4.17"
 sqlx = { version = "0.6.3", features = ["runtime-tokio-native-tls", "postgres", "migrate", "offline"] }
-tokio = { version = "1.27.0", features = ["full"] }
+tokio = { version = "1.28.0", features = ["full"] }
