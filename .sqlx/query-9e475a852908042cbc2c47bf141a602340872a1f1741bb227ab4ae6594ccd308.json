@@ -1,0 +1,34 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "select id as row_id, name, country_code from public.city order by id asc limit $1;",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "row_id",
+        "type_info": "Int4"
+      },
+      {
+        "ordinal": 1,
+        "name": "name",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 2,
+        "name": "country_code",
+        "type_info": "Bpchar"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Int8"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false
+    ]
+  },
+  "hash": "9e475a852908042cbc2c47bf141a602340872a1f1741bb227ab4ae6594ccd308"
+}

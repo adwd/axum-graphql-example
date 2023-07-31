@@ -21,5 +21,9 @@ derive_more = "0.99.17"
 dotenvy = "0.15.7"
 env_logger = "0.10.0"
 log = "0.4.19"
-sqlx = { version = "0.6.3", features = ["runtime-tokio-native-tls", "postgres", "migrate", "offline"] }
+sqlx = { version = "0.7.1", features = [
+    "runtime-tokio-native-tls",
+    "postgres",
+    "migrate",
+] }
 tokio = { version = "1.29.1", features = ["full"] }
