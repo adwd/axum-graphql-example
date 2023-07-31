@@ -1,0 +1,6 @@
+version: '3'
+services:
+  postgres-db:
+    image: ghusta/postgres-world-db:2.10
+    ports:
+      - "7777:5432"
