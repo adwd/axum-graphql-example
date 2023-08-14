@@ -26,4 +26,4 @@ sqlx = { version = "0.7.1", features = [
     "postgres",
     "migrate",
 ] }
-tokio = { version = "1.29.1", features = ["full"] }
+tokio = { version = "1.31.0", features = ["full"] }
