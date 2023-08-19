@@ -14,8 +14,8 @@ name = "sdl-export"
 path = "src/sdl_export.rs"
 
 [dependencies]
-async-graphql = { version = "5.0.10", features = ["dataloader"] }
-async-graphql-axum = "5.0.10"
+async-graphql = { version = "6.0.3", features = ["dataloader"] }
+async-graphql-axum = "6.0.3"
 axum = "0.6.20"
 derive_more = "0.99.17"
 dotenvy = "0.15.7"
@@ -26,4 +26,4 @@ sqlx = { version = "0.7.1", features = [
     "postgres",
     "migrate",
 ] }
-tokio = { version = "1.31.0", features = ["full"] }
+tokio = { version = "1.32.0", features = ["full"] }
