@@ -103,17 +103,18 @@ dependencies = [
 
 [[package]]
 name = "async-graphql-axum"
-version = "6.0.3"
+version = "6.0.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "896869e4f1ce40a1f18d751fa014eb48cf271fd22783fcf1aeb4f1537c827724"
+checksum = "86ec214a63d8f3d5cbc79d9f2c6bf011334f1a57f124d7655169fd18d5dbfbdc"
 dependencies = [
  "async-graphql",
  "async-trait",
  "axum",
  "bytes",
  "futures-util",
- "http-body",
  "serde_json",
+ "tokio",
+ "tokio-stream",
  "tokio-util",
  "tower-service",
 ]
@@ -2202,9 +2203,9 @@ dependencies = [
 
 [[package]]
 name = "tokio-stream"
-version = "0.1.11"
+version = "0.1.14"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d660770404473ccd7bc9f8b28494a811bc18542b915c0855c51e8f419d5223ce"
+checksum = "397c988d37662c7dda6d2208364a706264bf3d6138b11d436cbac0ad38832842"
 dependencies = [
  "futures-core",
  "pin-project-lite",
