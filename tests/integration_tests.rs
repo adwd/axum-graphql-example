@@ -47,7 +47,6 @@ mod integration_tests {
     }
 
     #[tokio::test]
-    #[ignore]
     async fn hello_world() {
         let app = get_app().await;
         let response = app
