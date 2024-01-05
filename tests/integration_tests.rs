@@ -1,8 +1,5 @@
 #[cfg(test)]
 mod integration_tests {
-
-    use std::time::Duration;
-
     use axum::{
         body::Body,
         http::{self, Request, StatusCode},
@@ -11,7 +8,9 @@ mod integration_tests {
     };
     use axum_graphql_example::graphql_schema;
     use serde_json::{json, Value};
+    use serial_test::serial;
     use sqlx::postgres::PgPoolOptions;
+    use std::time::Duration;
     use testcontainers::{clients, core::WaitFor, GenericImage};
     use tower::ServiceExt;
 
@@ -53,7 +52,7 @@ mod integration_tests {
     }
 
     #[tokio::test]
-    #[ignore]
+    #[serial]
     async fn hello_world() {
         let app = get_app().await;
         let response = app
@@ -68,6 +67,7 @@ mod integration_tests {
     }
 
     #[tokio::test]
+    #[serial]
     async fn test_graphiql() {
         let app = get_app().await;
         let response = app
@@ -93,6 +93,7 @@ mod integration_tests {
 
     #[tokio::test]
     #[ignore]
+    // #[serial] TODO: fix
     async fn cities() {
         println!("cities");
         let app = get_app().await;
