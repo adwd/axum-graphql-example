@@ -26,13 +26,13 @@ An edge in a connection.
 """
 type CityEdge {
   """
-  A cursor for use in pagination
-  """
-  cursor: String!
-  """
   The item at the end of the edge
   """
   node: City!
+  """
+  A cursor for use in pagination
+  """
+  cursor: String!
 }
 
 type Country {
@@ -84,10 +84,21 @@ type Query {
   """
   Fetch countries
   """
-  countries(search: String, limit: Int! = 20): [Country!]!
+  countries(
+    """
+    search query by country name
+    """
+    search: String
+    """
+    limit
+    """
+    limit: Int! = 20
+  ): [Country!]!
   cities(after: String, before: String, first: Int, last: Int): CityConnection!
 }
 
+directive @include(if: Boolean!) on FIELD | FRAGMENT_SPREAD | INLINE_FRAGMENT
+directive @skip(if: Boolean!) on FIELD | FRAGMENT_SPREAD | INLINE_FRAGMENT
 schema {
   query: Query
 }

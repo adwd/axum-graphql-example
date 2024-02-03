@@ -14,39 +14,35 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-      with:
-        ref: ${{ github.event.pull_request.head.sha }}
-    - uses: actions-rs/toolchain@v1
-      with:
-        toolchain: stable
-        components: rustfmt, clippy
-    - uses: r7kamura/rust-problem-matchers@v1
-    - name: cargo fmt
-      uses: actions-rs/cargo@v1
-      with:
-        command: fmt
-        args: --all -- --check
-    - name: cargo build
-      uses: actions-rs/cargo@v1
-      env:
-        SQLX_OFFLINE: 'true'
-      with:
-        command: build
-    - name: cargo clippy
-      uses: actions-rs/cargo@v1
-      env:
-        SQLX_OFFLINE: true
-      with:
-        command: clippy
-        args: -- -D warnings
-    - name: set up Docker
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y docker-compose
-    - name: cargo test
-      uses: actions-rs/cargo@v1
-      env:
-        SQLX_OFFLINE: 'true'
-      with:
-        command: test
+      - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          components: rustfmt, clippy
+      - uses: r7kamura/rust-problem-matchers@v1
+      - name: cargo fmt
+        uses: actions-rs/cargo@v1
+        with:
+          command: fmt
+          args: --all -- --check
+      - name: cargo build
+        uses: actions-rs/cargo@v1
+        env:
+          SQLX_OFFLINE: 'true'
+        with:
+          command: build
+      - name: cargo clippy
+        uses: actions-rs/cargo@v1
+        env:
+          SQLX_OFFLINE: true
+        with:
+          command: clippy
+          args: -- -D warnings
+      - name: cargo test
+        uses: actions-rs/cargo@v1
+        env:
+          SQLX_OFFLINE: 'true'
+        with:
+          command: test
