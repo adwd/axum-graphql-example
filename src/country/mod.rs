@@ -47,7 +47,6 @@ pub struct CountryFlagLoader {
     pool: sqlx::Pool<Postgres>,
 }
 
-#[async_trait::async_trait]
 impl Loader<String> for CountryFlagLoader {
     type Value = String;
     type Error = Arc<sqlx::Error>;

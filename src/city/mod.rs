@@ -27,7 +27,6 @@ pub struct CityLoader {
     pool: sqlx::Pool<Postgres>,
 }
 
-#[async_trait::async_trait]
 impl Loader<String> for CityLoader {
     type Value = Vec<City>;
     type Error = Arc<sqlx::Error>;
