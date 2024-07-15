@@ -14,7 +14,7 @@ name = "sdl-export"
 path = "src/sdl_export.rs"
 
 [dependencies]
-async-graphql = { version = "7.0.6", features = ["dataloader"] }
+async-graphql = { version = "7.0.7", features = ["dataloader"] }
 async-graphql-axum = "7.0.6"
 axum = "0.7.5"
 derive_more = "0.99.18"
