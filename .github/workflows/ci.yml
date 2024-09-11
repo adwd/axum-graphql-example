@@ -9,40 +9,16 @@ on:
 
 env:
   CARGO_TERM_COLOR: always
+  SQLX_OFFLINE: 'true'
 
 jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-        with:
-          ref: ${{ github.event.pull_request.head.sha }}
-      - uses: actions-rs/toolchain@v1
-        with:
-          toolchain: 1.80
-          components: rustfmt, clippy
-      - uses: r7kamura/rust-problem-matchers@v1
+      - uses: actions/checkout@v4
+      - uses: actions-rust-lang/setup-rust-toolchain@v1
       - name: cargo fmt
-        uses: actions-rs/cargo@v1
-        with:
-          command: fmt
-          args: --all -- --check
-      - name: cargo build
-        uses: actions-rs/cargo@v1
-        env:
-          SQLX_OFFLINE: 'true'
-        with:
-          command: build
-      - name: cargo clippy
-        uses: actions-rs/cargo@v1
-        env:
-          SQLX_OFFLINE: true
-        with:
-          command: clippy
-          args: -- -D warnings
-      - name: cargo test
-        uses: actions-rs/cargo@v1
-        env:
-          SQLX_OFFLINE: 'true'
-        with:
-          command: test
+        uses: actions-rust-lang/rustfmt@v1
+      - run: cargo build
+      - run: cargo clippy -- -D warnings
+      - run: cargo test
