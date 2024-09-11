@@ -19,7 +19,7 @@ jobs:
           ref: ${{ github.event.pull_request.head.sha }}
       - uses: actions-rs/toolchain@v1
         with:
-          toolchain: 1.76
+          toolchain: 1.80
           components: rustfmt, clippy
       - uses: r7kamura/rust-problem-matchers@v1
       - name: cargo fmt
