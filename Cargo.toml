@@ -20,7 +20,7 @@ axum = "0.7.9"
 derive_more = { version = "2.0.1", features = ["constructor"] }
 dotenvy = "0.15.7"
 env_logger = "0.11.6"
-log = "0.4.25"
+log = "0.4.26"
 sqlx = { version = "0.8.3", features = [
     "runtime-tokio-native-tls",
     "postgres",
