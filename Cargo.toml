@@ -21,7 +21,7 @@ derive_more = { version = "2.0.1", features = ["constructor"] }
 dotenvy = "0.15.7"
 env_logger = "0.11.6"
 log = "0.4.27"
-sqlx = { version = "0.8.3", features = [
+sqlx = { version = "0.8.4", features = [
     "runtime-tokio-native-tls",
     "postgres",
     "migrate",
